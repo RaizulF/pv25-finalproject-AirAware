@@ -62,8 +62,8 @@ class MainApp(QMainWindow):
         self.ui.actionExit.triggered.connect(self.closeWindow)
         self.ui.actionRefresh.triggered.connect(self.refresh_program)
         self.ui.btnDelete.clicked.connect(self.delete_selected_history)
-        self.ui.actionExport_to_CSV.triggered.connect(self.export_to_csv_via_menu)
-        self.ui.actionExport_to_PDF.triggered.connect(self.export_to_pdf_via_menu)
+        self.ui.actionExport_to_CSV.triggered.connect(self.export_to_csv)
+        self.ui.actionExport_to_PDF.triggered.connect(self.export_to_pdf)
         self.ui.btnSaveAs.clicked.connect(self.save_as)
         self.ui.actionAbout.triggered.connect(self.show_description)
 
@@ -282,6 +282,7 @@ class MainApp(QMainWindow):
 
     def export_to_csv(self, path_csv):
         try:
+            path_csv, _ = QtWidgets.QFileDialog.getSaveFileName(self, "Simpan CSV", "", "CSV Files (*.csv)")
             with open(path_csv, mode='w', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
 
@@ -304,6 +305,7 @@ class MainApp(QMainWindow):
 
     def export_to_pdf(self, path_pdf):
         try:
+            path_pdf, _ = QtWidgets.QFileDialog.getSaveFileName(self, "Simpan PDF", "", "PDF Files (*.pdf)")
             c = canvas.Canvas(path_pdf, pagesize=A4)
             _, height = A4
             y = height - 50
@@ -340,7 +342,6 @@ class MainApp(QMainWindow):
             "",
             "PDF Files (*.pdf);;CSV Files (*.csv)"
         )
-
         if path:
             if selected_filter == "CSV Files (*.csv)" or path.endswith(".csv"):
                 self.export_to_csv(path)
@@ -348,16 +349,6 @@ class MainApp(QMainWindow):
                 self.export_to_pdf(path)
             else:
                 QMessageBox.warning(self, "Format Tidak Didukung", "Hanya mendukung file PDF atau CSV.")
-
-    def export_to_csv_via_menu(self):
-        path_csv, _ = QtWidgets.QFileDialog.getSaveFileName(self, "Simpan CSV", "", "CSV Files (*.csv)")
-        if path_csv:
-            self.export_to_csv(path_csv)
-
-    def export_to_pdf_via_menu(self):
-        path_pdf, _ = QtWidgets.QFileDialog.getSaveFileName(self, "Simpan PDF", "", "PDF Files (*.pdf)")
-        if path_pdf:
-            self.export_to_pdf(path_pdf)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
