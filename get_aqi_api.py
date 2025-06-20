@@ -1,5 +1,9 @@
 import requests
-API_KEY = 'zVNMpUbzEkmGSl99fZA3QA==JqRGYA6DFqBJsjay'
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+API_KEY = os.getenv('API_KEY')
 
 def get_aqi_data(city):
     api_url = f'https://api.api-ninjas.com/v1/airquality?city={city}'
